@@ -32,10 +32,10 @@ def get_corners_from_grid_segmentation(prediction_result):
     contour_points = masks.xy[0]
     contour_points = np.array(contour_points)
     
-    leftmost = tuple(contour_points[contour_points[:, 0].argmin()])
-    rightmost = tuple(contour_points[contour_points[:, 0].argmax()])
-    topmost = tuple(contour_points[contour_points[:, 1].argmin()])
-    bottommost = tuple(contour_points[contour_points[:, 1].argmax()])
+    # leftmost = tuple(contour_points[contour_points[:, 0].argmin()])
+    # rightmost = tuple(contour_points[contour_points[:, 0].argmax()])
+    # topmost = tuple(contour_points[contour_points[:, 1].argmin()])
+    # bottommost = tuple(contour_points[contour_points[:, 1].argmax()])
     
     # Use OpenCV to approximate the contour to a polygon
     epsilon = 0.1 * cv2.arcLength(contour_points, True)
@@ -48,3 +48,22 @@ def get_corners_from_grid_segmentation(prediction_result):
         sorted_corners = sort_corners(approx_corners)
     else:
         raise Exception("Couldn't approximate a quadrilateral. Check the segmentation.")
+    
+    return sorted_corners
+
+def make_perspective_transform(image, corners):
+    
+    corners = np.array(corners, dtype="float32")
+    dimension = 640
+    
+    dst = np.array([
+        [0, 0],
+        [dimension - 1, 0],
+        [dimension - 1, dimension - 1],
+        [0, dimension - 1]
+    ], dtype="float32")
+    
+    M = cv2.getPerspectiveTransform(corners, dst)
+    warped = cv2.warpPerspective(image, M, (dimension, dimension))
+    
+    return warped
