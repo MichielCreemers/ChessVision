@@ -53,6 +53,6 @@ def make_projection(img_dir, projections_dir):
             
 if __name__ == "__main__":
     corners_model = YOLO('models/corners.pt')
-    img_dir = "C:/Users/Gebruiker/Downloads/grid_v2_jpg"
-    projections_dir = "C:/Users/Gebruiker/Downloads/projections"
+    img_dir = "images/dataset"
+    projections_dir = "images/projections"
     make_projection(img_dir, projections_dir)
