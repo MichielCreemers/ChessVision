@@ -106,6 +106,8 @@ def get_sorted_corner_coordinates(corners, offsetx=0, offsety=0):
         sorted_points = []
         i = 0
         for point in sorted_points_with_angle:
+            if i>=4:
+                break 
             sorted_points.append(point[0][i])
             i += 1
         

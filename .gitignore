@@ -1,1 +1,4 @@
 */dataset
+*/projections
+*__pycache__
+*.pt
