@@ -1,6 +1,13 @@
 # Hello !
-nja
----
+## To Do / Done
+ - [x] Corner Detection
+ - [ ] Make Grid
+ - [ ] Get correct board orientation
+ - [ ] Label chess pieces
+ - [ ] Train chess piece recognition model
+ - [ ] Map detected pieces to grid
+ - [ ] Output to FEN notation
+
 ## Pre-trained models
 Pre-trained models can be downloaded here:
 * Detecting the corners of the board: [corners.pt](https://1drv.ms/u/s!AtF_ruDO-AX-jhIXY82GK4tqbrni?e=OY8b9s)
