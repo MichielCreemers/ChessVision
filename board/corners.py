@@ -31,6 +31,40 @@ def box_coordinates(corners):
     
     return all_boxes.cpu().numpy()
 
+def label_and_sort_corners(corners):
+    if len(corners) != 4:
+        raise ValueError("There must be exactly four corner coordinates.")
+    
+    # Convert to numpy array for easier manipulation
+    corners = np.array(corners)
+    
+    # Calculate the centroid of the points
+    centroid = np.mean(corners, axis=0)
+    
+    # Calculate angles from centroid to each corner
+    angles = np.arctan2(corners[:, 1] - centroid[1], corners[:, 0] - centroid[0])
+    
+    # Determine the sorting order of corners counter-clockwise
+    sort_indices = np.argsort(-angles)  # Negate angles for counter-clockwise sorting
+    
+    # Map the sorted indices to their respective corner labels
+    corner_labels = ['top-left', 'top-right', 'bottom-right', 'bottom-left']  # counter-clockwise order
+    labeled_corners = {corner_labels[i]: tuple(corners[idx]) for i, idx in enumerate(sort_indices)}
+    
+    # Create a sorted list in the order: top-left, bottom-left, bottom-right, top-right
+    # Map the dictionary to the desired order
+    sorted_list = [labeled_corners['bottom-left'], labeled_corners['bottom-right'], 
+                   labeled_corners['top-right'], labeled_corners['top-left']]
+
+    return labeled_corners, sorted_list
+
+def add_offset(corners, offsetx=0, offsety=0):
+        corners[0] = (corners[0][0] - offsetx, corners[0][1] - offsety)
+        corners[1] = (corners[1][0] + offsetx, corners[1][1] - offsety)
+        corners[2] = (corners[2][0] + offsetx, corners[2][1] + offsety)
+        corners[3] = (corners[3][0] - offsetx, corners[3][1] + offsety)
+        return corners
+
 def get_sorted_corner_coordinates(corners, offsetx=0, offsety=0):
     """_summary_
 
@@ -49,13 +83,6 @@ def get_sorted_corner_coordinates(corners, offsetx=0, offsety=0):
         bottom_right = (x + w, y - h)
         center = (x + w/2, y - h/2)
         corner_coordinates.append((top_left, top_right, bottom_left, bottom_right, center))
-    
-    def add_ofset(corners):
-        corners[0] = (corners[0][0] - offsetx, corners[0][1] - offsety)
-        corners[1] = (corners[1][0] + offsetx, corners[1][1] - offsety)
-        corners[2] = (corners[2][0] + offsetx, corners[2][1] + offsety)
-        corners[3] = (corners[3][0] - offsetx, corners[3][1] + offsety)
-        return corners
     
     def leftmost_point(points):
         leftmost_point = points[0]
@@ -88,6 +115,7 @@ def get_sorted_corner_coordinates(corners, offsetx=0, offsety=0):
     sorted_corners = get_polygon_order(leftmost, corner_coordinates)
     
     # Add offset
-    #sorted_corners = add_ofset(sorted_corners)
+    # sorted_corners = add_offset(sorted_corners)
     
     return sorted_corners
+
