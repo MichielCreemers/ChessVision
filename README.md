@@ -5,8 +5,8 @@
 
 ## To Do / Done
  - [x] Corner Detection
- - [ ] Make Grid
- - [x] Get correct board orientation ❗Very primitive, can be made way more robust ► Check in `board/grid.py` the method`correct_orientation_advanced`❗
+ - [x] Make Grid
+ - [x] Get correct board orientation ❗Very primitive, can be made way more robust ► Check in `board/grid.py` the method `correct_orientation_advanced`❗
  - [ ] Label chess pieces
  - [ ] Train chess piece recognition model
  - [ ] Map detected pieces to grid

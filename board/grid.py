@@ -156,21 +156,44 @@ def correct_orientation_advanced(image):
     L_threshold = 100
     b_threshold = 140
     
-    print("BL_L: ", bl_L)
-    print("BL_b: ", bl_b)
-    print("BR_L: ", br_L)
-    print("BR_b: ", br_b)
-    print("TL_L: ", tl_L)
-    print("TL_b: ", tl_b)
-    print("TR_L: ", tr_L)
-    print("TR_b: ", tr_b)
+    # print("BL_L: ", bl_L)
+    # print("BL_b: ", bl_b)
+    # print("BR_L: ", br_L)
+    # print("BR_b: ", br_b)
+    # print("TL_L: ", tl_L)
+    # print("TL_b: ", tl_b)
+    # print("TR_L: ", tr_L)
+    # print("TR_b: ", tr_b)
     
     # Black and white condition checks
     correct = (bl_L < L_threshold or bl_b < b_threshold) and (br_L > L_threshold or br_b > b_threshold)
 
-                
+    # ...        
     
     if correct:
         return False  # No rotation needed
     else:
         return True   # Rotation needed
+    
+def map_grid_to_coordinates(image):
+    
+    h, w = image.shape[:2]
+    grid_size = 8
+    square_width = w // grid_size
+    square_height = h // grid_size
+    
+    grid_coordinates = {}
+    # labels --> [A8, B8, C8, D8, E8, F8, G8, H8, A7, B7, C7, D7, E7, F7, G7, H7, ...]
+    labels = [f"{chr(65 + col)}{8 - row}" for row in range(grid_size) for col in range(grid_size)]  
+    idx = 0
+    
+    for row in range(grid_size):
+        for col in range(grid_size):
+            x1 = col * square_width
+            y1 = row * square_height
+            x2 = x1 + square_width
+            y2 = y1 + square_height
+            grid_coordinates[labels[idx]] = [(x1, y1), (x2, y2)]
+            idx += 1
+    
+    return grid_coordinates
