@@ -197,3 +197,73 @@ def map_grid_to_coordinates(image):
             idx += 1
     
     return grid_coordinates
+
+grid_coords = {
+    'A8': [(0, 0), (80, 80)], 'B8': [(80, 0), (160, 80)], 'C8': [(160, 0), (240, 80)], 'D8': [(240, 0), (320, 80)],
+    'E8': [(320, 0), (400, 80)], 'F8': [(400, 0), (480, 80)], 'G8': [(480, 0), (560, 80)], 'H8': [(560, 0), (640, 80)],
+    'A7': [(0, 80), (80, 160)], 'B7': [(80, 80), (160, 160)], 'C7': [(160, 80), (240, 160)], 'D7': [(240, 80), (320, 160)],
+    'E7': [(320, 80), (400, 160)], 'F7': [(400, 80), (480, 160)], 'G7': [(480, 80), (560, 160)], 'H7': [(560, 80), (640, 160)],
+    'A6': [(0, 160), (80, 240)], 'B6': [(80, 160), (160, 240)], 'C6': [(160, 160), (240, 240)], 'D6': [(240, 160), (320, 240)],
+    'E6': [(320, 160), (400, 240)], 'F6': [(400, 160), (480, 240)], 'G6': [(480, 160), (560, 240)], 'H6': [(560, 160), (640, 240)],
+    'A5': [(0, 240), (80, 320)], 'B5': [(80, 240), (160, 320)], 'C5': [(160, 240), (240, 320)], 'D5': [(240, 240), (320, 320)],
+    'E5': [(320, 240), (400, 320)], 'F5': [(400, 240), (480, 320)], 'G5': [(480, 240), (560, 320)], 'H5': [(560, 240), (640, 320)],
+    'A4': [(0, 320), (80, 400)], 'B4': [(80, 320), (160, 400)], 'C4': [(160, 320), (240, 400)], 'D4': [(240, 320), (320, 400)],
+    'E4': [(320, 320), (400, 400)], 'F4': [(400, 320), (480, 400)], 'G4': [(480, 320), (560, 400)], 'H4': [(560, 320), (640, 400)],
+    'A3': [(0, 400), (80, 480)], 'B3': [(80, 400), (160, 480)], 'C3': [(160, 400), (240, 480)], 'D3': [(240, 400), (320, 480)],
+    'E3': [(320, 400), (400, 480)], 'F3': [(400, 400), (480, 480)], 'G3': [(480, 400), (560, 480)], 'H3': [(560, 400), (640, 480)],
+    'A2': [(0, 480), (80, 560)], 'B2': [(80, 480), (160, 560)], 'C2': [(160, 480), (240, 560)], 'D2': [(240, 480), (320, 560)],
+    'E2': [(320, 480), (400, 560)], 'F2': [(400, 480), (480, 560)], 'G2': [(480, 480), (560, 560)], 'H2': [(560, 480), (640, 560)],
+    'A1': [(0, 560), (80, 640)], 'B1': [(80, 560), (160, 640)], 'C1': [(160, 560), (240, 640)], 'D1': [(240, 560), (320, 640)],
+    'E1': [(320, 560), (400, 640)], 'F1': [(400, 560), (480, 640)], 'G1': [(480, 560), (560, 640)], 'H1': [(560, 560), (640, 640)]
+}
+
+
+def place_pieces_on_board(board, pieces, grid_coords=grid_coords):
+    """
+    Place each detected piece on the board based on their coordinates.
+
+    :param board: 2D list representing the chessboard
+    :param pieces: List of tuples containing piece center coordinates and piece type [(x, y), 'piece']
+    :param grid_coords: Dictionary mapping square names to their coordinate ranges
+    """
+    
+    def find_square(x, y, grid_coords):
+        """
+        Find the corresponding square for the given coordinates.
+
+        :param x: X coordinate
+        :param y: Y coordinate
+        :param grid_coords: Dictionary mapping square names to their coordinate ranges
+        :return: Square name (e.g., 'A8') if found, else None
+        """
+        for square, ((x1, y1), (x2, y2)) in grid_coords.items():
+            if x1 <= x <= x2 and y1 <= y <= y2:
+                return square
+        return None
+    
+    for (x, y), piece in pieces:
+        square = find_square(x, y, grid_coords)
+        if square:
+            row = 8 - int(square[1])  # Convert rank to row index (0-7)
+            col = ord(square[0]) - ord('A')  # Convert file to column index (0-7)
+            board[row][col] = piece
+    
+def generate_fen(board):
+    fen = ''
+    for row in board:
+        empty_count = 0
+        for cell in row:
+            if cell == '':
+                empty_count += 1
+            else:
+                if empty_count > 0:
+                    fen += str(empty_count)
+                    empty_count = 0
+                fen += cell
+        if empty_count > 0:
+            fen += str(empty_count)
+        fen += '/'
+    return fen.rstrip('/')
+    
+    
+    
