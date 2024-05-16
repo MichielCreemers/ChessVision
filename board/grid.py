@@ -66,7 +66,7 @@ def make_perspective_transform(image, corners):
     M = cv2.getPerspectiveTransform(corners, dst)
     warped = cv2.warpPerspective(image, M, (dimension, dimension))
     
-    return warped
+    return warped, M
 
 def correct_orientation(image):
     img_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
