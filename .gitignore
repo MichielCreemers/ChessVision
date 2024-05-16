@@ -2,3 +2,5 @@
 */projections
 *__pycache__
 *.pt
+*.pyc
+board/__pycache__/corners.cpython-311.pyc
