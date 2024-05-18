@@ -44,7 +44,6 @@ def get_corners_from_grid_segmentation(prediction_result):
     if len(approx_corners) == 4:
         approx_corners = approx_corners.reshape((4, 2))
         # Sort the corners into the order you need for perspective transformation
-        print("gets here")
         sorted_corners = sort_corners(approx_corners)
     else:
         raise Exception("Couldn't approximate a quadrilateral. Check the segmentation.")

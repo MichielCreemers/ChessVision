@@ -1,5 +1,6 @@
 from ultralytics import YOLO
 import numpy as np
+import cv2
 import math
 
 def predict_corners(model, image_path, confidence_threshold=0.1, iou_threshold=0.2):
@@ -33,7 +34,7 @@ def box_coordinates(corners):
 
 def label_and_sort_corners(corners):
     if len(corners) != 4:
-        raise ValueError("There must be exactly four corner coordinates.")
+        return None, None
     
     # Convert to numpy array for easier manipulation
     corners = np.array(corners)
@@ -65,7 +66,7 @@ def add_offset(corners, offsetx=0, offsety=0):
         corners[3] = (corners[3][0] - offsetx, corners[3][1] + offsety)
         return corners
 
-def get_sorted_corner_coordinates(corners, offsetx=0, offsety=0):
+def get_corner_coordinates(corners, offsetx=0, offsety=0):
     """_summary_
 
     Args:
@@ -121,3 +122,28 @@ def get_sorted_corner_coordinates(corners, offsetx=0, offsety=0):
     
     return sorted_corners
 
+def transform_image_corners(image, corners):
+    """_summary_
+
+    Args:
+        image (_type_): _description_
+        corners (_type_): _description_
+    """
+    corners_temp = np.array(corners, dtype="float32")
+
+    # Define the dimensions of the window where the new image will be displayed
+    dimension = 640  # Set this to what fits your needs, maybe 300x300 or 400x400 pixels
+    margin = 0
+
+    # The destination points are the points of the new image (a perfect square)
+    dst = np.array([
+        [0, 0],
+        [dimension - 1 - margin, margin],
+        [dimension - 1 - margin, dimension - 1 - margin],
+        [margin, dimension - 1 - margin]
+    ], dtype="float32")
+    # Compute the perspective transform matrix and apply it
+    M = cv2.getPerspectiveTransform(corners_temp, dst)
+    warped = cv2.warpPerspective(image, M, (dimension, dimension))
+
+    return warped
