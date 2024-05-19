@@ -3,17 +3,18 @@ import argparse
 import time
 from ultralytics import YOLO
 import cv2
-import numpy as np
-import matplotlib.pyplot as plt
 import board.corners as corners
 import board.grid as grid
 import board.pieces as pieces
+import board.moves as moves
+from stockfish import Stockfish
+from IPython.display import display
 
 """
 Belangrijk voor API:
 - API krijgt een image binnen
     + string 'white' of 'black' voor wie bovenkant bord is
-    + idk wat nog nodig is voor kris zijn ding
+    + idk wat nog nodig is voor kris zijn ding, wie aan zet is ofzo?
 - image lezen met cv2.imread
 """
 def image_to_FEN(image, white_or_black_top, 
@@ -87,6 +88,7 @@ if __name__ == '__main__':
     pieces_iou = args.pieces_iou
     xoffset = args.offsetx
     yoffset = args.offsety
+    stockfish_path = args.stockfish_path
     debugg = args.debug
     
     debug = False
@@ -115,6 +117,9 @@ if __name__ == '__main__':
     print('Models loaded')
     print('-----------------------------------------------------------------------------')
 
+    # stockfish
+    stockfish = Stockfish(stockfish_path)
+    
     # Normaal hier API starten
     
     # test op image
@@ -128,6 +133,14 @@ if __name__ == '__main__':
     print(f"FEN Notation Prediction: {fen}")
     print(f"Time taken: {end-start:.2f} seconds")
     
-    
+    fen = moves.determineFEN(fen, 'w')
+    if moves.is_valid_fen(fen):
+        svg_output = moves.output_board_best_move(fen, stockfish)
+        if svg_output:
+            display(svg_output) # TOONT NIKS MA PRINT GEWOON OBJECT
+        else:
+            print("No best move available or error in generating SVG")
+    else:
+        print("Invalid FEN notation")
     
     

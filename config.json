@@ -7,5 +7,6 @@
     "pieces_iou": 0.35,
     "offsetx": 300,
     "offsety": 300,
+    "stockfish_path": "C:/Users/Gebruiker/Desktop/School/Extended Reality/ChessAR_final/stockfish/stockfish-windows-x86-64-avx2",
     "debug": "False"
 }
