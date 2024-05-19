@@ -1,18 +1,22 @@
-from flask import Flask, request, send_file, jsonify
-from PIL import Image
-import io
 import json
 import argparse
+import time
 from ultralytics import YOLO
-from stockfish import Stockfish
 import cv2
 import board.corners as corners
 import board.grid as grid
 import board.pieces as pieces
 import board.moves as moves
+from stockfish import Stockfish
+from IPython.display import display
 
-app = Flask(__name__)
-
+"""
+Belangrijk voor API:
+- API krijgt een image binnen
+    + string 'white' of 'black' voor wie bovenkant bord is
+    + idk wat nog nodig is voor kris zijn ding, wie aan zet is ofzo?
+- image lezen met cv2.imread
+"""
 def image_to_FEN(image, white_or_black_top, 
                  corner_model, grid_model, pieces_model,
                  corner_conf, corner_iou,
@@ -60,65 +64,7 @@ def image_to_FEN(image, white_or_black_top,
     fen_notation = pieces.create_FEN_notation(mapped_pieces)
     
     return fen_notation
-
-@app.route('/process_image', methods=['GET'])
-def process_image():
-    # if 'image' not in request.files:
-    #     return "No image part", 400
-
-    # image_file = request.files['image']
-    # if image_file.filename == '':
-    #     return "No selected file", 400
-
-    # if 'player' not in request.files:
-    #     return "No player given", 400
-    
-    # image_file = request.files['image']
-    # if image_file.filename =='':
-    #     return "No selected player", 400
-    
-    # if 'player' not in request.files:
-    #     return "No player given", 400
-    
-    # image_file = request.files['image']
-    # if image_file.filename =='':
-    #     return "No selected player", 400
-
-    #needs to be exrtacted from request
-    image_file = 'images/test_images/img_3.jpg'
-    image = cv2.imread(image_file)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    white_or_black_top = 'black'
-    player = 'b'
-
-    # calculate FEN notation
-    fen =image_to_FEN(image, white_or_black_top, corners_model, grid_model, 
-                 pieces_model, corner_conf, corner_iou, pieces_conf,
-                 pieces_conf, xoffset, yoffset, piece_samples)
-
-    # add who has to make move
-    fen = moves.determineFEN(fen, player)
-
-    if moves.is_valid_fen(fen):
-        svg_output = moves.output_board_best_move(fen, stockfish)
-    else:
-        print("Invalid FEN notation")
-
-    # Convert SVG data to bytes for response
-    svg_content = svg_output.data
-    print(svg_content)
-    svg_bytes = svg_content.encode('utf-8')
-    return send_file(
-        io.BytesIO(svg_bytes),
-        mimetype='image/svg+xml',
-        as_attachment=True,
-        download_name='processed_image.svg'
-    )
-
-@app.route('/hello', methods=['GET'])
-def hello_world():
-    return jsonify(message="Hello, World!")
-
+     
         
 def parse_args():
     """Parse input arguments from JSON config file."""
@@ -129,29 +75,11 @@ def parse_args():
 
 if __name__ == '__main__':
     print('*****************************************************************************')
-    print('''                                                                                                              
-                   ,--,                                                                            ,----..            ,--. 
- ,----..         ,--.'|    ,---,.  .--.--.    .--.--.                ,---,   .--.--.     ,---,    /   /   \         ,--.'| 
-/   /   \     ,--,  | :  ,'  .' | /  /    '. /  /    '.       ,---.,`--.' | /  /    '. ,`--.' |  /   .     :    ,--,:  : | 
-|   :     :,---.'|  : ',---.'   ||  :  /`. /|  :  /`. /      /__./||   :  :|  :  /`. / |   :  : .   /   ;.  \,`--.'`|  ' : 
-.   |  ;. /|   | : _' ||   |   .';  |  |--` ;  |  |--`  ,---.;  ; |:   |  ';  |  |--`  :   |  '.   ;   /  ` ;|   :  :  | | 
-.   ; /--` :   : |.'  |:   :  |-,|  :  ;_   |  :  ;_   /___/ \  | ||   :  ||  :  ;_    |   :  |;   |  ; \ ; |:   |   \ | : 
-;   | ;    |   ' '  ; ::   |  ;/| \  \    `. \  \    `.\   ;  \ ' |'   '  ; \  \    `. '   '  ;|   :  | ; | '|   : '  '; | 
-|   : |    '   |  .'. ||   :   .'  `----.   \ `----.   \    \  \: ||   |  |  `----.   \|   |  |.   |  ' ' ' :'   ' ;.    ; 
-.   | '___ |   | :  | '|   |  |-,  __ \  \  | __ \  \  | ;   \  ' .'   :  ;  __ \  \  |'   :  ;'   ;  \; /  ||   | | \   | 
-'   ; : .'|'   : |  : ;'   :  ;/| /  /`--'  //  /`--'  /  \   \   '|   |  ' /  /`--'  /|   |  ' \   \  ',  / '   : |  ; .' 
-'   | '/  :|   | '  ,/ |   |    | --'.     /'--'.     /    \   `  ;'   :  |'--'.     / '   :  |  ;   :    /  |   | '`--'   
-|   :    / ;   : ;--'  |   :   .'  `--'---'   `--'---'      :   \ |;   |.'   `--'---'  ;   |.'    \   \ .'   '   : |       
-\   \ .'   |   ,/      |   | ,'                              '---" '---'               '---'       `---`     ;   |.'       
- `---`     '---'       `----'                                                                                 '---'         
-                                                                                                                                
-          ''')
+    print('API STARTED')
     print('*****************************************************************************')
     args = parse_args()
-
-    print('Loading API arguments')
-    print('-----------------------------------------------------------------------------')
-
+    
+    # API arguments
     piece_model = args.pieces_model
     piece_samples = args.piece_sampling
     corner_conf = args.corner_conf
@@ -162,11 +90,11 @@ if __name__ == '__main__':
     yoffset = args.offsety
     stockfish_path = args.stockfish_path
     debugg = args.debug
-
+    
     debug = False
     if debugg == "True":
         debug = True
-        
+   
     if piece_model not in ['large', 'nano']:
         raise ValueError(f"Invalid model: {piece_model}")
     
@@ -174,6 +102,7 @@ if __name__ == '__main__':
     print(f"Mapping pieces to grid is done by using {piece_samples} samples")
     print('-----------------------------------------------------------------------------')
     
+    # Models
     corners_model_path = 'models/corners.pt'
     grid_model_path = 'models/segment_grid.pt'
     if piece_model == 'large':
@@ -187,6 +116,31 @@ if __name__ == '__main__':
     
     print('Models loaded')
     print('-----------------------------------------------------------------------------')
-    stockfish = Stockfish(stockfish_path)
 
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # stockfish
+    stockfish = Stockfish(stockfish_path)
+    
+    # Normaal hier API starten
+    
+    # test op image
+    image = cv2.imread('images/test_images/img_3.jpg')
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    white_or_black_top = 'black'
+    
+    start = time.time()
+    fen = image_to_FEN(image, white_or_black_top, corners_model, grid_model, pieces_model, corner_conf, corner_iou, pieces_conf, pieces_iou, xoffset, yoffset, piece_samples)
+    end = time.time()
+    print(f"FEN Notation Prediction: {fen}")
+    print(f"Time taken: {end-start:.2f} seconds")
+    
+    fen = moves.determineFEN(fen, 'w')
+    if moves.is_valid_fen(fen):
+        svg_output = moves.output_board_best_move(fen, stockfish)
+        if svg_output:
+            display(svg_output) # TOONT NIKS MA PRINT GEWOON OBJECT
+        else:
+            print("No best move available or error in generating SVG")
+    else:
+        print("Invalid FEN notation")
+    
+    
