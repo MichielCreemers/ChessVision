@@ -11,8 +11,9 @@
  - [X] Train chess piece recognition model
  - [X] Map detected pieces to grid
  - [X] Output to FEN notation
- - [ ] Best move
- - [ ] Running API communication 
+ - [X] Best move
+ - [X] Running API communication 
+ - [X] App
 
 ## Pre-trained models
 Pre-trained models can be downloaded here:
@@ -22,7 +23,7 @@ Pre-trained models can be downloaded here:
 * Segmenting the tiles: [segment_grid.pt](https://1drv.ms/u/s!AtF_ruDO-AX-jiA2mkErqoB3VrHU?e=rlrAb1)
 * Detecting Pieces on Board: [pieces_large.pt](https://1drv.ms/u/s!AtF_ruDO-AX-kUPtnTvaNnW-0rdN?e=6rK2Qc)
 * Detecting Pieces on Board: [pieces_nano.pt](https://1drv.ms/u/s!AtF_ruDO-AX-kUYP2Mp7a614Jh5J?e=Dv3fJ0)
-
+* Link to app: [ChessBot.zip](https://1drv.ms/u/s!AtF_ruDO-AX-kUiOVJsi6ivtiKqd?e=LOjFOB)
 
 
 ## Future Work
