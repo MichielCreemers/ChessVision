@@ -78,7 +78,7 @@ def process_image():
     
     image_data = data['image']
     image_data = base64.b64decode(image_data)    
-    print(image_data)
+    # print(image_data)
 
     if not image_data:
         return jsonify({"error": "No image has been sent"}), 400
