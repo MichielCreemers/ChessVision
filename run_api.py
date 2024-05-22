@@ -1,22 +1,26 @@
+from flask import Flask, request, send_file, jsonify
+from PIL import Image
+import numpy as np
+import os
+import io
+import base64
 import json
 import argparse
-import time
 from ultralytics import YOLO
+from stockfish import Stockfish
 import cv2
 import board.corners as corners
 import board.grid as grid
 import board.pieces as pieces
 import board.moves as moves
-from stockfish import Stockfish
-from IPython.display import display
 
-"""
-Belangrijk voor API:
-- API krijgt een image binnen
-    + string 'white' of 'black' voor wie bovenkant bord is
-    + idk wat nog nodig is voor kris zijn ding, wie aan zet is ofzo?
-- image lezen met cv2.imread
-"""
+app = Flask(__name__)
+
+
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['MAX_CONTENT_LENGTH'] = 40 * 1024 * 1024
+
 def image_to_FEN(image, white_or_black_top, 
                  corner_model, grid_model, pieces_model,
                  corner_conf, corner_iou,
@@ -64,7 +68,67 @@ def image_to_FEN(image, white_or_black_top,
     fen_notation = pieces.create_FEN_notation(mapped_pieces)
     
     return fen_notation
-     
+
+@app.route('/process_image', methods=['POST'])
+def process_image():
+    print("ok")
+    data = request.json
+    if not data:
+        return jsonify({"error": "No data sent"}), 400
+    
+    image_data = data['image']
+    image_data = base64.b64decode(image_data)    
+    print(image_data)
+
+    if not image_data:
+        return jsonify({"error": "No image has been sent"}), 400
+    
+    
+    image = Image.open(io.BytesIO(image_data))
+    file_path = os.path.join(UPLOAD_FOLDER, 'uploaded_image.jpg')
+    image.save(file_path)
+    image = cv2.imread(file_path)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+        
+        
+    print("white or black")
+    white_or_black_top = data.get('white_or_black_top')
+    print(white_or_black_top)
+    player = data.get('player')
+    print(player)
+    # Ensure that player is either 'w' or 'b'
+    if player not in ['w', 'b']:
+        return jsonify({"error": "Invalid player value"}), 400
+
+    # Assume these variables are defined and loaded correctly in your environment
+    # corners_model, grid_model, pieces_model, corner_conf, corner_iou, 
+    # pieces_conf, xoffset, yoffset, piece_samples, stockfish
+    print("trying fen")
+    
+    fen = image_to_FEN(
+        image, white_or_black_top, corners_model, grid_model, 
+        pieces_model, corner_conf, corner_iou, pieces_conf,
+        pieces_iou,xoffset, yoffset,num_points)
+    
+    print("fen is" + fen)
+    fen = moves.determineFEN(fen, player)
+
+    if moves.is_valid_fen(fen):
+        svg_output = moves.output_board_best_move(fen, stockfish)
+    else:
+        return jsonify({"error": "Invalid FEN notation"}), 400
+
+    svg_content = svg_output.data
+    svg_base64 = base64.b64encode(svg_content.encode('utf-8')).decode('utf-8')
+    
+    return jsonify({"svg": svg_base64}),200
+  
+
+@app.route('/hello', methods=['GET'])
+def hello_world():
+    return jsonify(message="Hello, World!")
+
         
 def parse_args():
     """Parse input arguments from JSON config file."""
@@ -75,11 +139,29 @@ def parse_args():
 
 if __name__ == '__main__':
     print('*****************************************************************************')
-    print('API STARTED')
+    print('''                                                                                                              
+                   ,--,                                                                            ,----..            ,--. 
+ ,----..         ,--.'|    ,---,.  .--.--.    .--.--.                ,---,   .--.--.     ,---,    /   /   \         ,--.'| 
+/   /   \     ,--,  | :  ,'  .' | /  /    '. /  /    '.       ,---.,`--.' | /  /    '. ,`--.' |  /   .     :    ,--,:  : | 
+|   :     :,---.'|  : ',---.'   ||  :  /`. /|  :  /`. /      /__./||   :  :|  :  /`. / |   :  : .   /   ;.  \,`--.'`|  ' : 
+.   |  ;. /|   | : _' ||   |   .';  |  |--` ;  |  |--`  ,---.;  ; |:   |  ';  |  |--`  :   |  '.   ;   /  ` ;|   :  :  | | 
+.   ; /--` :   : |.'  |:   :  |-,|  :  ;_   |  :  ;_   /___/ \  | ||   :  ||  :  ;_    |   :  |;   |  ; \ ; |:   |   \ | : 
+;   | ;    |   ' '  ; ::   |  ;/| \  \    `. \  \    `.\   ;  \ ' |'   '  ; \  \    `. '   '  ;|   :  | ; | '|   : '  '; | 
+|   : |    '   |  .'. ||   :   .'  `----.   \ `----.   \    \  \: ||   |  |  `----.   \|   |  |.   |  ' ' ' :'   ' ;.    ; 
+.   | '___ |   | :  | '|   |  |-,  __ \  \  | __ \  \  | ;   \  ' .'   :  ;  __ \  \  |'   :  ;'   ;  \; /  ||   | | \   | 
+'   ; : .'|'   : |  : ;'   :  ;/| /  /`--'  //  /`--'  /  \   \   '|   |  ' /  /`--'  /|   |  ' \   \  ',  / '   : |  ; .' 
+'   | '/  :|   | '  ,/ |   |    | --'.     /'--'.     /    \   `  ;'   :  |'--'.     / '   :  |  ;   :    /  |   | '`--'   
+|   :    / ;   : ;--'  |   :   .'  `--'---'   `--'---'      :   \ |;   |.'   `--'---'  ;   |.'    \   \ .'   '   : |       
+\   \ .'   |   ,/      |   | ,'                              '---" '---'               '---'       `---`     ;   |.'       
+ `---`     '---'       `----'                                                                                 '---'         
+                                                                                                                                
+          ''')
     print('*****************************************************************************')
     args = parse_args()
-    
-    # API arguments
+
+    print('Loading API arguments')
+    print('-----------------------------------------------------------------------------')
+
     piece_model = args.pieces_model
     piece_samples = args.piece_sampling
     corner_conf = args.corner_conf
@@ -90,11 +172,12 @@ if __name__ == '__main__':
     yoffset = args.offsety
     stockfish_path = args.stockfish_path
     debugg = args.debug
-    
+    num_points = 10
+
     debug = False
     if debugg == "True":
         debug = True
-   
+        
     if piece_model not in ['large', 'nano']:
         raise ValueError(f"Invalid model: {piece_model}")
     
@@ -102,7 +185,6 @@ if __name__ == '__main__':
     print(f"Mapping pieces to grid is done by using {piece_samples} samples")
     print('-----------------------------------------------------------------------------')
     
-    # Models
     corners_model_path = 'models/corners.pt'
     grid_model_path = 'models/segment_grid.pt'
     if piece_model == 'large':
@@ -116,31 +198,6 @@ if __name__ == '__main__':
     
     print('Models loaded')
     print('-----------------------------------------------------------------------------')
-
-    # stockfish
     stockfish = Stockfish(stockfish_path)
-    
-    # Normaal hier API starten
-    
-    # test op image
-    image = cv2.imread('images/test_images/img_3.jpg')
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    white_or_black_top = 'black'
-    
-    start = time.time()
-    fen = image_to_FEN(image, white_or_black_top, corners_model, grid_model, pieces_model, corner_conf, corner_iou, pieces_conf, pieces_iou, xoffset, yoffset, piece_samples)
-    end = time.time()
-    print(f"FEN Notation Prediction: {fen}")
-    print(f"Time taken: {end-start:.2f} seconds")
-    
-    fen = moves.determineFEN(fen, 'w')
-    if moves.is_valid_fen(fen):
-        svg_output = moves.output_board_best_move(fen, stockfish)
-        if svg_output:
-            display(svg_output) # TOONT NIKS MA PRINT GEWOON OBJECT
-        else:
-            print("No best move available or error in generating SVG")
-    else:
-        print("Invalid FEN notation")
-    
-    
+
+    app.run(host='0.0.0.0', port=5000, debug=True)

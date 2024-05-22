@@ -21,8 +21,7 @@ Pre-trained models can be downloaded here:
 * Detecting Pieces on Board: [pieces_large.pt](https://1drv.ms/u/s!AtF_ruDO-AX-kUPtnTvaNnW-0rdN?e=6rK2Qc)
 * Detecting Pieces on Board: [pieces_nano.pt](https://1drv.ms/u/s!AtF_ruDO-AX-kUWB85bIEYBQ9d9O?e=y9J0ye)
 
-* Training data: [train images in jpg](https://1drv.ms/f/s!AtF_ruDO-AX-jiFG-6Im3EnM0mNI?e=tolJ7L)
-* 
+
 
 ## Future Work
 - [ ] Board Orientation Detection ► Now just user input 
