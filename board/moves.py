@@ -79,6 +79,22 @@ def flip_fen(fen):
     flipped_fen = ' '.join(parts)
     return flipped_fen
 
+def correct_fen_for_black_top(fen):
+    parts = fen.split(' ')
+    position = parts[0]
+    ranks = position.split('/')
+    
+    # Reverse the order of ranks
+    flipped_ranks = ranks[::-1]
+    
+    # Reverse the order of files within each rank
+    flipped_files_ranks = [rank[::-1] for rank in flipped_ranks]
+    
+    # Reassemble the full FEN string
+    parts[0] = '/'.join(flipped_files_ranks)
+    corrected_fen = ' '.join(parts)
+    return corrected_fen
+
 def mirror_fen(fen):
     parts = fen.split(' ')
     position = parts[0]
