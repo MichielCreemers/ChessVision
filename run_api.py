@@ -1,6 +1,9 @@
 from flask import Flask, request, send_file, jsonify
 from PIL import Image
+import numpy as np
+import os
 import io
+import base64
 import json
 import argparse
 from ultralytics import YOLO
@@ -12,6 +15,11 @@ import board.pieces as pieces
 import board.moves as moves
 
 app = Flask(__name__)
+
+
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['MAX_CONTENT_LENGTH'] = 40 * 1024 * 1024
 
 def image_to_FEN(image, white_or_black_top, 
                  corner_model, grid_model, pieces_model,
@@ -61,59 +69,61 @@ def image_to_FEN(image, white_or_black_top,
     
     return fen_notation
 
-@app.route('/process_image', methods=['GET'])
+@app.route('/process_image', methods=['POST'])
 def process_image():
-    # if 'image' not in request.files:
-    #     return "No image part", 400
-
-    # image_file = request.files['image']
-    # if image_file.filename == '':
-    #     return "No selected file", 400
-
-    # if 'player' not in request.files:
-    #     return "No player given", 400
+    print("ok")
+    data = request.json
+    if not data:
+        return jsonify({"error": "No data sent"}), 400
     
-    # image_file = request.files['image']
-    # if image_file.filename =='':
-    #     return "No selected player", 400
-    
-    # if 'player' not in request.files:
-    #     return "No player given", 400
-    
-    # image_file = request.files['image']
-    # if image_file.filename =='':
-    #     return "No selected player", 400
+    image_data = data['image']
+    image_data = base64.b64decode(image_data)    
+    print(image_data)
 
-    #needs to be exrtacted from request
-    image_file = 'images/test_images/img_3.jpg'
-    image = cv2.imread(image_file)
+    if not image_data:
+        return jsonify({"error": "No image has been sent"}), 400
+    
+    
+    image = Image.open(io.BytesIO(image_data))
+    file_path = os.path.join(UPLOAD_FOLDER, 'uploaded_image.jpg')
+    image.save(file_path)
+    image = cv2.imread(file_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    white_or_black_top = 'black'
-    player = 'b'
 
-    # calculate FEN notation
-    fen =image_to_FEN(image, white_or_black_top, corners_model, grid_model, 
-                 pieces_model, corner_conf, corner_iou, pieces_conf,
-                 pieces_conf, xoffset, yoffset, piece_samples)
+        
+        
+    print("white or black")
+    white_or_black_top = data.get('white_or_black_top')
+    print(white_or_black_top)
+    player = data.get('player')
+    print(player)
+    # Ensure that player is either 'w' or 'b'
+    if player not in ['w', 'b']:
+        return jsonify({"error": "Invalid player value"}), 400
 
-    # add who has to make move
+    # Assume these variables are defined and loaded correctly in your environment
+    # corners_model, grid_model, pieces_model, corner_conf, corner_iou, 
+    # pieces_conf, xoffset, yoffset, piece_samples, stockfish
+    print("trying fen")
+    
+    fen = image_to_FEN(
+        image, white_or_black_top, corners_model, grid_model, 
+        pieces_model, corner_conf, corner_iou, pieces_conf,
+        pieces_iou,xoffset, yoffset,num_points)
+    
+    print("fen is" + fen)
     fen = moves.determineFEN(fen, player)
 
     if moves.is_valid_fen(fen):
         svg_output = moves.output_board_best_move(fen, stockfish)
     else:
-        print("Invalid FEN notation")
+        return jsonify({"error": "Invalid FEN notation"}), 400
 
-    # Convert SVG data to bytes for response
     svg_content = svg_output.data
-    print(svg_content)
-    svg_bytes = svg_content.encode('utf-8')
-    return send_file(
-        io.BytesIO(svg_bytes),
-        mimetype='image/svg+xml',
-        as_attachment=True,
-        download_name='processed_image.svg'
-    )
+    svg_base64 = base64.b64encode(svg_content.encode('utf-8')).decode('utf-8')
+    
+    return jsonify({"svg": svg_base64}),200
+  
 
 @app.route('/hello', methods=['GET'])
 def hello_world():
@@ -162,6 +172,7 @@ if __name__ == '__main__':
     yoffset = args.offsety
     stockfish_path = args.stockfish_path
     debugg = args.debug
+    num_points = 10
 
     debug = False
     if debugg == "True":
