@@ -108,14 +108,34 @@ def mirror_fen(fen):
     mirrored_fen = ' '.join(parts)
     return mirrored_fen
      
-def output_board_best_move(fen, stockfish):
+# def output_board_best_move(fen, stockfish):
+#     move = determine_best_move(fen, stockfish)
+#     if move:
+#         board = chess.Board(fen)
+#         move_from = chess.parse_square(move[0])
+#         move_to = chess.parse_square(move[1])
+#         arrows = [chess.svg.Arrow(move_from, move_to, color="#0000cccc")]
+#         svg = chess.svg.board(board=board, arrows=arrows, size=350)
+#         return SVG(svg)
+#     else:
+#         return None
+
+def output_board_best_move(fen, stockfish, white_or_black_top='black'):
     move = determine_best_move(fen, stockfish)
     if move:
         board = chess.Board(fen)
+        # Set the orientation based on the parameter passed
+        if white_or_black_top == 'white':
+            board.turn = chess.WHITE
+        else:
+            board.turn = chess.BLACK
+            
         move_from = chess.parse_square(move[0])
         move_to = chess.parse_square(move[1])
         arrows = [chess.svg.Arrow(move_from, move_to, color="#0000cccc")]
-        svg = chess.svg.board(board=board, arrows=arrows, size=350)
+        
+        # Generate the SVG with the specified orientation
+        svg = chess.svg.board(board=board, arrows=arrows, size=350, orientation=chess.WHITE if white_or_black_top == 'white' else chess.BLACK)
         return SVG(svg)
     else:
         return None
