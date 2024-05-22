@@ -63,6 +63,22 @@ def determine_best_move(fen, stockfish):
     else:
         return None
     
+def flip_fen(fen):
+    # Split the FEN string into parts (position, side to move, castling, en passant, halfmove clock, fullmove number)
+    parts = fen.split(' ')
+    # Only flip the board position part, which is the first element in the parts list
+    position = parts[0]
+    
+    # Reverse the order of ranks in the position part
+    flipped_position = '/'.join(position.split('/')[::-1])
+    
+    # Replace the original position with the flipped one
+    parts[0] = flipped_position
+    
+    # Reconstruct the full FEN string
+    flipped_fen = ' '.join(parts)
+    return flipped_fen
+     
 def output_board_best_move(fen, stockfish):
     move = determine_best_move(fen, stockfish)
     if move:
