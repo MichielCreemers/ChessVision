@@ -78,6 +78,19 @@ def flip_fen(fen):
     # Reconstruct the full FEN string
     flipped_fen = ' '.join(parts)
     return flipped_fen
+
+def mirror_fen(fen):
+    parts = fen.split(' ')
+    position = parts[0]
+    ranks = position.split('/')
+    
+    # Reverse the order of ranks and reverse the order of files within each rank
+    mirrored_ranks = ['/'.join(rank[::-1] for rank in ranks)][::-1]
+    
+    # Reassemble the full FEN string
+    parts[0] = '/'.join(mirrored_ranks)
+    mirrored_fen = ' '.join(parts)
+    return mirrored_fen
      
 def output_board_best_move(fen, stockfish):
     move = determine_best_move(fen, stockfish)
