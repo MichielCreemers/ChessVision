@@ -1,7 +1,7 @@
 {
     "pieces_model": "large",
     "piece_sampling": 10,
-    "corner_conf": 0.25,
+    "corner_conf": 0.15,
     "corner_iou": 0.1,
     "pieces_conf": 0.5,
     "pieces_iou": 0.35,

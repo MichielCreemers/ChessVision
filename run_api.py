@@ -19,7 +19,6 @@ app = Flask(__name__)
 
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-app.config['MAX_CONTENT_LENGTH'] = 40 * 1024 * 1024
 
 def image_to_FEN(image, white_or_black_top, 
                  corner_model, grid_model, pieces_model,
@@ -121,7 +120,7 @@ def process_image():
 
     svg_content = svg_output.data
     svg_base64 = base64.b64encode(svg_content.encode('utf-8')).decode('utf-8')
-    
+    print("*****************************************************************************************************")
     return jsonify({"svg": svg_base64}),200
   
 
@@ -185,7 +184,7 @@ if __name__ == '__main__':
     print(f"Mapping pieces to grid is done by using {piece_samples} samples")
     print('-----------------------------------------------------------------------------')
     
-    corners_model_path = 'models/corners.pt'
+    corners_model_path = 'models/corners_best_win.pt'
     grid_model_path = 'models/segment_grid.pt'
     if piece_model == 'large':
         pieces_model_path = 'models/pieces_large.pt'
