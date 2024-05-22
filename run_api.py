@@ -47,9 +47,9 @@ def image_to_FEN(image, white_or_black_top,
     
     # Grid Orientation
     # If white top, rotate 180 degrees
-    if white_or_black_top == 'white':
-        transformed_grid = cv2.rotate(transformed_grid, cv2.ROTATE_180)
-        transformed_image = cv2.rotate(transformed_image, cv2.ROTATE_180)
+    # if white_or_black_top == 'white':
+    #     transformed_grid = cv2.rotate(transformed_grid, cv2.ROTATE_180)
+    #     transformed_image = cv2.rotate(transformed_image, cv2.ROTATE_180)
         
     # Check if a 90 degree rotation is needed
     need_rotation = grid.correct_orientation_advanced(transformed_grid)
@@ -109,6 +109,9 @@ def process_image():
         image, white_or_black_top, corners_model, grid_model, 
         pieces_model, corner_conf, corner_iou, pieces_conf,
         pieces_iou,xoffset, yoffset,num_points)
+    
+    if white_or_black_top == 'white': # if white is on top, flip the FEN
+        fen = moves.flip_fen(fen)
     
     print("fen is" + fen)
     fen = moves.determineFEN(fen, player)
