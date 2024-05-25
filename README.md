@@ -1,11 +1,15 @@
-# ChessVision API 
+# ♟ ChessVision API ♟
 <p allign="center">
     <img src=https://github.com/MichielCreemers/ChessAR/blob/main/images/ChessVisionLogo.png />
 </p>
-Welcome to the ChessVision API, a powerful tool designed to transform the traditional chess experience into an interactive and analytical adventure.
+
+## Motivation
+Welcome to the ChessVision API, a powerful tool designed to transform the traditional chess experience into an interactive and analytical adventure. This project leverages deep learning object detection architectures and image processing techiniques to analyze photographs of chess boards.
+
+Whether you're a hobbyist looking to analyze your game by saving a digital representation of you physical setup, or a developer seeking to integrate chess insights into your applications, ChessVision provides an easy-to-use API that can enrich your chess playing or analysis.
 
 ## Description of project
-♟♟♟
+Currently the API is configured in a way to work together with an adroid app we made that can be downloaded here: Link to app: [ChessBot.zip](https://1drv.ms/u/s!AtF_ruDO-AX-kUiOVJsi6ivtiKqd?e=LOjFOB).
 
 ## To Do / Done
  - [x] Corner Detection
