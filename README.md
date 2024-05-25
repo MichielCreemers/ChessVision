@@ -1,6 +1,6 @@
 # ♟ ChessVision API ♟
 <p allign="center">
-    <img src=https://github.com/MichielCreemers/ChessAR/blob/main/images/ChessVisionLogo.png />
+    <img src="https://github.com/MichielCreemers/ChessAR/blob/main/images/ChessVisionLogo.png" />
 </p>
 
 ## Motivation
@@ -10,6 +10,12 @@ Whether you're a hobbyist looking to analyze your game by saving a digital repre
 
 ## Description of project
 Currently the API is configured in a way to work together with an adroid app we made that can be downloaded here: Link to app: [ChessBot.zip](https://1drv.ms/u/s!AtF_ruDO-AX-kUiOVJsi6ivtiKqd?e=LOjFOB).
+
+<p allign="center">
+    <img src="https://github.com/MichielCreemers/ChessAR/blob/main/images/appje.png" />
+</p>
+
+
 
 ## To Do / Done
  - [x] Corner Detection
