@@ -35,11 +35,13 @@ The piece detection is done by training both a large and nano YOLOv8 object dete
 ### Overview of model performance
 <table>
     <tr>
-        <th> NJAAA </th>
-        <th> NJAAA </th>
-        <th> NJAAA </th>
+        <th> Model </th>
+        <th> Inference time </th>
+        <th> MAP50 </th>
+        <th> MAP50-95 </th>
     </tr>
     <tr>
+        <td> NJAAA </td>
         <td> NJAAA </td>
         <td> NJAAA </td>
         <td> NJAAA </td>
@@ -48,6 +50,7 @@ The piece detection is done by training both a large and nano YOLOv8 object dete
 
 ## Flask API
 
+# Running the Code
 
 ## To Do / Done
  - [x] Corner Detection
