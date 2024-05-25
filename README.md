@@ -16,13 +16,35 @@ Currently the API is configured in a way to work together with an adroid app we 
 </p>
 This is just one of the many usecases someone could use this API for.
 
-# Framework
 ## From picture to FEN notation
-In the picture below is an overview of the pipeline that an input picture goes through to be converted to FEN.
+In the picture below is an overview of the pipeline that an input picture goes through to be converted to FEN. Custom datasets were made to train models. **❗ Because of this we expect a significant performance drop on other types of chess boards, since our models/datasets are trained/created for one specific type of chess set ❗**
 
 <p allign="center">
     <img src="https://github.com/MichielCreemers/ChessAR/blob/main/images/er_framework.png" />
 </p>
+
+### Corner Detection
+Predicting the corners is done using a medium YOLOv8 object detection architecture, the dataset can be downloaded here: [corner-detection-dataset](https://universe.roboflow.com/chessar-c1hel/chess-board-detection-3jgw6). A pre-trained model can be downloaded here: [corners_best.pt](https://1drv.ms/u/s!AtF_ruDO-AX-kUTz1-GwVH9S7PBd?e=z4Oar3)
+
+### Grid Segmentation
+The grid segmentation is done using a small YOLOv8 segmentation architecture. Again a custom dataset for our own specific chess set was made for training and can be downloaded here: [grid-segmentation-dataset](https://universe.roboflow.com/chessar-c1hel/chess-board-detection-2). A pre-trained model can be downloaded here: [segment_grid.pt](https://1drv.ms/u/s!AtF_ruDO-AX-jiA2mkErqoB3VrHU?e=rlrAb1).
+
+### Piece Detection
+The piece detection is done by training both a large and nano YOLOv8 object detection architecture on a custom dataset that can be found here: [piece-detection-dataset](https://universe.roboflow.com/chessar-c1hel/chess_pieces_detection-7lqul). A pre-trained model can be downloaded here: [pieces_large.pt](https://1drv.ms/u/s!AtF_ruDO-AX-kUPtnTvaNnW-0rdN?e=6rK2Qc) or [pieces_nano.pt](https://1drv.ms/u/s!AtF_ruDO-AX-kUYP2Mp7a614Jh5J?e=Dv3fJ0).
+
+### Overview of model performance
+<table>
+    <tr>
+        <th> NJAAA </th>
+        <th> NJAAA </th>
+        <th> NJAAA </th>
+    </tr>
+    <tr>
+        <td> NJAAA </td>
+        <td> NJAAA </td>
+        <td> NJAAA </td>
+    </tr>
+</table>
 
 ## Flask API
 
