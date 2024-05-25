@@ -1,5 +1,7 @@
 # ChessVision API 
-![Logo](images/ChessVisionLogo.png)
+<p allign="center">
+    <img src=https://github.com/MichielCreemers/ChessAR/blob/main/images/ChessVisionLogo.png />
+</p>
 Welcome to the ChessVision API, a powerful tool designed to transform the traditional chess experience into an interactive and analytical adventure.
 
 ## Description of project
