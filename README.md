@@ -20,7 +20,7 @@ This is just one of the many usecases someone could use this API for.
 In the picture below is an overview of the pipeline that an input picture goes through to be converted to FEN. Custom datasets were made to train models. **❗ Because of this we expect a significant performance drop on other types of chess boards, since our models/datasets are trained/created for one specific type of chess set ❗**
 
 <p allign="center">
-    <img src="https://github.com/MichielCreemers/ChessAR/blob/main/images/test_images/chessvision.jpeg" />
+    <img src="https://github.com/MichielCreemers/ChessAR/blob/main/images/test_images/chessvision.jpg" />
 </p>
 
 ### Corner Detection
