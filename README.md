@@ -9,12 +9,22 @@ Welcome to the ChessVision API, a powerful tool designed to transform the tradit
 Whether you're a hobbyist looking to analyze your game by saving a digital representation of you physical setup, or a developer seeking to integrate chess insights into your applications, ChessVision provides an easy-to-use API that can enrich your chess playing or analysis.
 
 ## Description of project
-Currently the API is configured in a way to work together with an adroid app we made that can be downloaded here: Link to app: [ChessBot.zip](https://1drv.ms/u/s!AtF_ruDO-AX-kUiOVJsi6ivtiKqd?e=LOjFOB).
+Currently the API is configured in a way to work together with an adroid app we made that can be downloaded here: [ChessBot.zip](https://1drv.ms/u/s!AtF_ruDO-AX-kUiOVJsi6ivtiKqd?e=LOjFOB).
 
 <p allign="center">
     <img src="https://github.com/MichielCreemers/ChessAR/blob/main/images/appje.png" />
 </p>
+This is just one of the many usecases someone could use this API for.
 
+# Framework
+## From picture to FEN notation
+In the picture below is an overview of the pipeline that an input picture goes through to be converted to FEN.
+
+<p allign="center">
+    <img src="https://github.com/MichielCreemers/ChessAR/blob/main/images/er_framework.png" />
+</p>
+
+## Flask API
 
 
 ## To Do / Done
