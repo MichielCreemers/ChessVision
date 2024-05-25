@@ -47,10 +47,16 @@ The piece detection is done by training both a large and nano YOLOv8 object dete
         <td> NJAAA </td>
     </tr>
 </table>
+Note the very small drop in precision when going from a large to a nano architecture for detecting the piece, but a rather big drop in inference time. 
 
 ## Flask API
+Jens
 
 # Running the Code
+Python version 3.11.7 is used. The dependancies can be installed by running:
+```
+pip install -r requirements.txt
+```
 
 ## To Do / Done
  - [x] Corner Detection
