@@ -102,8 +102,8 @@ Note that there might be some missing dependancies, I didn't use a specific envi
     "debug": "False"
     }
    ```
-   4. Run API
-   5. Change IP adress in app (see earlier: Flask API)
+4. Run API
+5. Change IP adress in app (see earlier: Flask API)
 
 
 # Future Work
