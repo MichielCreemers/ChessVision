@@ -20,7 +20,7 @@ This is just one of the many usecases someone could use this API for.
 In the picture below is an overview of the pipeline that an input picture goes through to be converted to FEN. Custom datasets were made to train models. **❗ Because of this we expect a significant performance drop on other types of chess boards, since our models/datasets are trained/created for one specific type of chess set ❗**
 
 <p allign="center">
-    <img src="https://github.com/MichielCreemers/ChessAR/blob/main/images/test_images/er_framework.png" />
+    <img src="https://github.com/MichielCreemers/ChessVision/blob/main/images/er_framework.png" />
 </p>
 
 ### Corner Detection
@@ -53,7 +53,7 @@ Note the very small drop in precision when going from a large to a nano architec
 To communicate between the app and the API, Flask is used. This is micro framework that can receive GET and POST requests. As of now, it is set up to be hosted on the a laptop so that all devices in the same can communicate to it. However, it can also be deployed on a server. To be able to connect to the API, the IP address has to be changed in the code of the file chessBot3\app\src\main\java\com\example\chessbot
 
 <p allign="center">
-    <img src="https://github.com/MichielCreemers/ChessAR/blob/main/images/chessvision.jpg" />
+    <img src="https://github.com/MichielCreemers/ChessVision/blob/main/images/test_images/chessvision.jpg" />
 </p>
 
 # Running the Code
