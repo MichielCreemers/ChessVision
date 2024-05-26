@@ -88,6 +88,21 @@ Note that there might be some missing dependancies, I didn't use a specific envi
 1. Start by placing the pre-trained models in the `models/` directory.
 2. ...
 3. Dowload the Stockfish chess engine from https://stockfishchess.org/download/ and change the stockfish_path parameter in config.json to the location of the stockfish executable.
+4. Configure the `config.json`:
+   ```json
+   {
+    "pieces_model": "large",    # Choose between 'nano' and 'large'
+    "piece_sampling": 10,       # Number of samples each piece bounding box is sampled
+    "corner_conf": 0.15,
+    "corner_iou": 0.1,
+    "pieces_conf": 0.5,
+    "pieces_iou": 0.35,
+    "offsetx": 300,             # Offsets to make sure the whole pieces are visibla after W1     
+    "offsety": 300,
+    "stockfish_path": "stockfish/stockfish-ubuntu-x86-64-avx2",  # Path to stockfish 
+    "debug": "False"
+    }
+   ```
 
 
 # Future Work
@@ -95,7 +110,7 @@ Note that there might be some missing dependancies, I didn't use a specific envi
 * As mentioned before, all the models are trained on a custom dataset for 1 specific chess board. Because of this we think the performance will drop if u try to use it with another chess set. 
   
 
-- [ ] The datasets are linked in the discription, so we highly encourage you that expand our dataset and make the API usable for multiple datasets.
+- [ ] The datasets are linked in the discription, so we highly encourage you that expand our dataset and make the API usable for multiple chess sets.
 - [ ] Board Orientation Detection ► Now just user input 
 - [ ] If a picture is taken from a too large angle, the first transform will transform the picture so that white/black are left/right. This is illegal for FEN notation. In the file `board/grid.py` you can find a proof of concept function `correct_orientation_advanced()` that detects wheter the board is correctly orientated. This is not implemented in the API.
 - [ ] The complete FEN notation requires parameters such as 'castling availability', 'en passant', 'half-move clock' and 'full-move number'. These are hardcoded as of right now because it was not our goal to make a chess app. The main focus was to make the 3D to 2D API.
