@@ -135,7 +135,7 @@ def output_board_best_move(fen, stockfish, white_or_black_top='black'):
         arrows = [chess.svg.Arrow(move_from, move_to, color="#0000cccc")]
         
         # Generate the SVG with the specified orientation
-        svg = chess.svg.board(board=board, arrows=arrows, size=350, orientation=chess.WHITE if white_or_black_top == 'white' else chess.BLACK)
+        svg = chess.svg.board(board=board, arrows=arrows, size=350, orientation=chess.WHITE if white_or_black_top == 'black' else chess.BLACK)
         return SVG(svg)
     else:
         return None
