@@ -110,14 +110,16 @@ def process_image():
         pieces_model, corner_conf, corner_iou, pieces_conf,
         pieces_iou,xoffset, yoffset,num_points)
     
-    if white_or_black_top == 'white': # if white is on top, flip the FEN
-        fen = moves.flip_fen(fen)
     
     print("fen is" + fen)
     fen = moves.determineFEN(fen, player)
 
+    if white_or_black_top == 'white': # if white is on top, flip the FEN
+        fen = moves.correct_fen_for_black_top(fen)
+        
     if moves.is_valid_fen(fen):
-        svg_output = moves.output_board_best_move(fen, stockfish)
+        svg_output = moves.output_board_best_move(fen, stockfish, white_or_black_top)
+            
     else:
         return jsonify({"error": "Invalid FEN notation"}), 400
 
