@@ -47,7 +47,7 @@ The piece detection is done by training both a large and nano YOLOv8 object dete
         <td> NJAAA </td>
     </tr>
 </table>
-Note the very small drop in precision when going from a large to a nano architecture for detecting the piece, but a rather big drop in inference time. 
+Note the very small drop in precision when going from a large to a nano architecture for detecting the pieces, but a rather big drop in inference time. 
 
 ## Flask API
 Jens
