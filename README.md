@@ -86,9 +86,8 @@ pip install -r requirements.txt
 Note that there might be some missing dependancies, I didn't use a specific environment for this project and I wouldn't want you to install 30GB of libraries 😁.
 
 1. Start by placing the pre-trained models in the `models/` directory.
-2. ...
-3. Dowload the Stockfish chess engine from https://stockfishchess.org/download/ and change the stockfish_path parameter in config.json to the location of the stockfish executable.
-4. Configure the `config.json`:
+2. Dowload the Stockfish chess engine from https://stockfishchess.org/download/ and change the stockfish_path parameter in config.json to the location of the stockfish executable.
+3. Configure the `config.json`:
    ```json
    {
     "pieces_model": "large",    # Choose between 'nano' and 'large'
@@ -97,7 +96,7 @@ Note that there might be some missing dependancies, I didn't use a specific envi
     "corner_iou": 0.1,
     "pieces_conf": 0.5,
     "pieces_iou": 0.35,
-    "offsetx": 300,             # Offsets to make sure the whole pieces are visibla after W1     
+    "offsetx": 300,             # Offsets to make sure the whole pieces are visible after W1     
     "offsety": 300,
     "stockfish_path": "stockfish/stockfish-ubuntu-x86-64-avx2",  # Path to stockfish 
     "debug": "False"
