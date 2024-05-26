@@ -41,16 +41,34 @@ The piece detection is done by training both a large and nano YOLOv8 object dete
         <th> MAP50-95 </th>
     </tr>
     <tr>
-        <td> NJAAA </td>
-        <td> NJAAA </td>
-        <td> NJAAA </td>
-        <td> NJAAA </td>
+        <td> Corner Detection </td>
+        <td> 30ms </td>
+        <td> 90% </td>
+        <td> 45% </td>
+    </tr>
+    <tr>
+        <td> Grid Segmentation </td>
+        <td> 20ms </td>
+        <td> 99.8% </td>
+        <td> 98% </td>
+    </tr>
+    <tr>
+        <td> Piece Detection Large </td>
+        <td> 35ms </td>
+        <td> 98% </td>
+        <td> 94% </td>
+    </tr>
+    <tr>
+        <td> Piece Detection Nano </td>
+        <td> 15ms </td>
+        <td> 97% </td>
+        <td> 94% </td>
     </tr>
 </table>
 Note the very small drop in precision when going from a large to a nano architecture for detecting the pieces, but a rather big drop in inference time. 
 
 ## Flask API
-To communicate between the app and the API, Flask is used. This is micro framework that can receive GET and POST requests. As of now, it is set up to be hosted on the a laptop so that all devices in the same can communicate to it. However, it can also be deployed on a server. To be able to connect to the API, the IP address has to be changed in the code of the file chessBot3\app\src\main\java\com\example\chessbot
+To communicate between the app and the API, Flask is used. This is micro framework that can receive GET and POST requests. As of now, it is set up to be hosted on the a laptop so that all devices on the same network can communicate with it. However, it can also be deployed on a server. To be able to connect to the API, the IP address has to be changed in the code of the file chessBot3\app\src\main\java\com\example\chessbot
 
 <p allign="center">
     <img src="https://github.com/MichielCreemers/ChessVision/blob/main/images/test_images/chessvision.jpg" />
