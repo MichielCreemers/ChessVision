@@ -51,11 +51,14 @@ Note the very small drop in precision when going from a large to a nano architec
 
 ## Flask API
 To communicate between the app and the API, Flask is used. This is micro framework that can receive GET and POST requests. As of now, it is set up to be hosted on the a laptop so that all devices in the same can communicate to it. However, it can also be deployed on a server. To be able to connect to the API, the IP address has to be changed in the code of the file chessBot3\app\src\main\java\com\example\chessbot
+
 <p allign="center">
     <img src="https://github.com/MichielCreemers/ChessAR/blob/main/images/appje.png" />
 </p>
+
 # Running the Code
 Python version 3.11.7 is used. The dependancies can be installed by running:
+
 ```
 pip install -r requirements.txt
 ```
