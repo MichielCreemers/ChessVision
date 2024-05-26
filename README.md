@@ -86,10 +86,13 @@ Note that there might be some missing dependancies, I didn't use a specific envi
 2. ...
 
 
-
-
-
-
 # Future Work
+* All the jupyter notebooks are left in the main branch so you can experiment with them.
+* As mentioned before, all the models are trained on a custom dataset for 1 specific chess board. Because of this we think the performance will drop if u try to use it with another chess set. 
+  
+
+- [ ] The datasets are linked in the discription, so we highly encourage you that expand our dataset and make the API usable for multiple datasets.
 - [ ] Board Orientation Detection ► Now just user input 
+- [ ] If a picture is taken from a too large angle, the first transform will transform the picture so that white/black are left/right. This is illegal for FEN notation. In the file `board/grid.py` you can find a proof of concept function `correct_orientation_advanced()` that detects wheter the board is correctly orientated. This is not implemented in the API.
+- [ ] The complete FEN notation requires parameters such as 'castling availability', 'en passant', 'half-move clock' and 'full-move number'. These are hardcoded as of right now because it was not our goal to make a chess app. The main focus was to make the 3D to 2D API.
 
