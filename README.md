@@ -87,7 +87,7 @@ Note that there might be some missing dependancies, I didn't use a specific envi
 
 1. Start by placing the pre-trained models in the `models/` directory.
 2. ...
-3. Dowload the Stockfish chess engine from https://stockfishchess.org/download/ and change the stockfish parameter in config to json to the location of the stockfish executable.
+3. Dowload the Stockfish chess engine from https://stockfishchess.org/download/ and change the stockfish_path parameter in config.json to the location of the stockfish executable.
 
 
 
